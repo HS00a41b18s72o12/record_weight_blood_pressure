@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Recorder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script> <!-- Optional helper -->
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>My Health</h1>
+            <p id="current-date">Today</p>
+        </header>
+
+        <main>
+            <section class="card input-section">
+                <h2>New Entry</h2>
+                
+                <form id="record-form">
+                    <!-- Weight Group -->
+                    <div class="input-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" step="0.1" placeholder="0.0" required>
+                        <div class="suggestions" id="weight-suggestions">
+                            <!-- Chips will be injected here -->
+                        </div>
+                    </div>
+
+                    <!-- BP Group -->
+                    <div class="input-group">
+                        <label>Blood Pressure (mmHg)</label>
+                        <div class="bp-inputs">
+                            <div class="bp-field">
+                                <input type="number" id="systolic" placeholder="Sys" required>
+                                <span class="label-sub">Systolic</span>
+                            </div>
+                            <span class="bp-separator">/</span>
+                            <div class="bp-field">
+                                <input type="number" id="diastolic" placeholder="Dia" required>
+                                <span class="label-sub">Diastolic</span>
+                            </div>
+                        </div>
+                        <div class="suggestions" id="bp-suggestions">
+                            <!-- Chips will be injected here -->
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        Save Record
+                    </button>
+                </form>
+            </section>
+
+            <section class="card chart-section">
+                <div class="chart-header">
+                    <h2>Trends</h2>
+                    <select id="chart-period">
+                        <option value="7">Last 7 Entries</option>
+                        <option value="30" selected>Last 30 Entries</option>
+                        <option value="90">Last 90 Entries</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="historyChart"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <div id="toast" class="toast hidden">Saved Successfully</div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
