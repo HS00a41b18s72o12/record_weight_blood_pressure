@@ -7,7 +7,8 @@ const weightInput = document.getElementById('weight');
 const sysInput = document.getElementById('systolic');
 const diaInput = document.getElementById('diastolic');
 const weightSuggestions = document.getElementById('weight-suggestions');
-const bpSuggestions = document.getElementById('bp-suggestions');
+const sysSuggestions = document.getElementById('sysSuggestions');
+const diaSuggestions = document.getElementById('diaSuggestions');
 const chartCanvas = document.getElementById('historyChart');
 const periodSelect = document.getElementById('chart-period');
 const toast = document.getElementById('toast');
@@ -39,16 +40,13 @@ async function loadLatestAndSuggestions() {
         }
         const data = await response.json();
 
-        // Pre-fill fields? Request says "Previous value appears in input form candidate" 
-        // usually means placeholder or suggestions. User said "①前回の入力値が入力フォームの候補に出る" 
-        // implies suggestions, but let's also pre-fill the inputs as a starting point 
-        // or just placeholder. Let's set the value to be helpful.
         weightInput.value = data.weight;
         sysInput.value = data.systolic;
         diaInput.value = data.diastolic;
 
         generateWeightSuggestions(data.weight);
-        generateBPSuggestions(data.systolic, data.diastolic);
+        generateBPSuggestions(sysSuggestions, sysInput, data.systolic);
+        generateBPSuggestions(diaSuggestions, diaInput, data.diastolic);
 
     } catch (e) {
         console.error('Error loading latest:', e);
@@ -58,16 +56,14 @@ async function loadLatestAndSuggestions() {
 function generateWeightSuggestions(baseWeight) {
     weightSuggestions.innerHTML = '';
     // +/- 1kg, 0.2kg steps.
-    // Range: -1.0 to +1.0
     const steps = [];
-    for (let i = -1.0; i <= 1.05; i += 0.2) { // 1.05 to handle float precision
+    for (let i = -1.0; i <= 1.05; i += 0.2) {
         steps.push(i);
     }
 
     steps.forEach(step => {
         // Fix float precision
         const val = Math.round((baseWeight + step) * 10) / 10;
-        // Don't show negative weights if base is small (unlikely for adult)
         if (val <= 0) return;
 
         createChip(weightSuggestions, `${val.toFixed(1)}`, () => {
@@ -76,8 +72,10 @@ function generateWeightSuggestions(baseWeight) {
     });
 }
 
-function generateBPSuggestions(baseSys, baseDia) {
-    bpSuggestions.innerHTML = '';
+function generateBPSuggestions(container, inputElement, baseValue) {
+    if (!container) return;
+
+    container.innerHTML = '';
     // +/- 10, 2 steps
     const steps = [];
     for (let i = -10; i <= 10; i += 2) {
@@ -85,39 +83,11 @@ function generateBPSuggestions(baseSys, baseDia) {
     }
 
     steps.forEach(step => {
-        const s = Math.round(baseSys + step);
-        const d = Math.round(baseDia + step); // Heuristic: apply same delta? 
-        // Actually user said "BP ... candidates display +/- 10 ...". 
-        // It's ambiguous if they want separate suggestions for Sys/Dia or combined.
-        // Usually they move together or user wants to pick Sys then Dia.
-        // "combined" is harder to guess.
-        // Let's assume the "Candidate" sets BOTH if clicked? 
-        // That might be annoying if only one changed.
+        const val = Math.round(baseValue + step);
+        if (val <= 0) return;
 
-        // BETTER UX: Create suggestions for "Sys / Dia" pairs? 
-        // Or maybe just generic chips like "+2", "+4", "-2" that apply to usage?
-        // User text: "前回の入力値のプラスマイナス10までの値が2きざみで入力候補として表示される"
-        // "Values up to +/- 10 from previous input displayed as candidates"
-
-        // Let's try listing pairs: "120/80", "122/82"... assuming they shift together?
-        // Or just list Sys values?
-        // Let's try listing Copouples (Sys/Dia) assuming they drift similarly, 
-        // BUT allow editing.
-        // If I render pairs, it might be too many if we permute.
-        // If I render just Sys values, Dia is left alone.
-
-        // Let's implement: Chips show "Sys / Dia" (e.g. "120/80") 
-        // where Sys varies by +/-10 and Dia varies by same amount (heuristic)
-        // OR just vary Sys?
-
-        // Let's assume the user wants to pick the 'Set'.
-        // Let's create chips for S: -10...10, and keep D constant (or same delta).
-        // Let's try same delta for both.
-
-        const label = `${s}/${d}`;
-        createChip(bpSuggestions, label, () => {
-            sysInput.value = s;
-            diaInput.value = d;
+        createChip(container, `${val}`, () => {
+            inputElement.value = val;
         }, step === 0);
     });
 }
@@ -157,7 +127,7 @@ form.onsubmit = async (e) => {
             showToast();
             // Refresh chart and suggestions (new base)
             loadHistoryAndChart();
-            loadLatestAndSuggestions(); // This will regenerate suggestions based on new "latest"
+            loadLatestAndSuggestions();
         } else {
             alert('Failed to save');
         }
@@ -195,8 +165,6 @@ function renderChart() {
     if (!allEntries.length) return;
 
     const limit = parseInt(periodSelect.value);
-    // Slice data. allEntries is Newest -> Oldest. 
-    // We want the last N entries, so take top N.
     const dataSlice = allEntries.slice(0, limit).reverse(); // Reverse to Chronological for Chart
 
     const labels = dataSlice.map(e => {

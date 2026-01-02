@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script> <!-- Optional helper -->
 </head>
+
 <body>
     <div class="app-container">
         <header>
@@ -21,7 +23,7 @@
         <main>
             <section class="card input-section">
                 <h2>New Entry</h2>
-                
+
                 <form id="record-form">
                     <!-- Weight Group -->
                     <div class="input-group">
@@ -46,7 +48,10 @@
                                 <span class="label-sub">Diastolic</span>
                             </div>
                         </div>
-                        <div class="suggestions" id="bp-suggestions">
+                        <div class="suggestions" id="sysSuggestions">
+                            <!-- Chips will be injected here -->
+                        </div>
+                        <div class="suggestions" id="diaSuggestions" style="margin-top: 1rem;">
                             <!-- Chips will be injected here -->
                         </div>
                     </div>
@@ -72,9 +77,10 @@
             </section>
         </main>
     </div>
-    
+
     <div id="toast" class="toast hidden">Saved Successfully</div>
 
     <script src="/static/app.js"></script>
 </body>
+
 </html>

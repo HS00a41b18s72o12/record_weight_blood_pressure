@@ -124,12 +124,33 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 /* Suggestions */
+.suggestions-container {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.suggestion-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.suggestion-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    width: 30px; /* fixed width for alignment */
+    flex-shrink: 0;
+}
+
 .suggestions {
     display: flex;
     overflow-x: auto;
     gap: 8px;
-    padding: 8px 0;
-    margin-top: 8px;
+    padding: 4px 0;
+    flex: 1;
     /* Hide scrollbar but keep functionality */
     -ms-overflow-style: none;
     /* IE and Edge */
