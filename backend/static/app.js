@@ -169,7 +169,9 @@ function renderChart() {
 
     const labels = dataSlice.map(e => {
         const d = new Date(e.date);
-        return `${d.getMonth() + 1}/${d.getDate()}`;
+        const dateStr = `${d.getMonth() + 1}/${d.getDate()}`;
+        const timeStr = `${d.getHours()}:${d.getMinutes().toString().padStart(2, '0')}`;
+        return `${dateStr} ${timeStr}`;
     });
     const weights = dataSlice.map(e => e.weight);
     const sys = dataSlice.map(e => e.systolic);
