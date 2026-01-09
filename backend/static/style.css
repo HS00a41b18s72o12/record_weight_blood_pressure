@@ -84,6 +84,7 @@ input[type="number"] {
     outline: none;
     transition: border-color 0.2s;
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 input[type="number"]:focus {
@@ -141,7 +142,8 @@ input[type="number"]::-webkit-inner-spin-button {
     font-size: 0.75rem;
     font-weight: 600;
     color: var(--text-muted);
-    width: 30px; /* fixed width for alignment */
+    width: 30px;
+    /* fixed width for alignment */
     flex-shrink: 0;
 }
 
@@ -243,6 +245,45 @@ input[type="number"]::-webkit-inner-spin-button {
     border: 1px solid var(--border-color);
     font-size: 0.875rem;
     background: #fff;
+}
+
+.averages-container {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.avg-item {
+    flex: 1;
+    background: #F9FAFB;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--border-color);
+}
+
+.avg-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.avg-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.avg-unit {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.avg-item.primary .avg-value {
+    color: var(--primary);
 }
 
 .chart-container {

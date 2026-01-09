@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script> <!-- Optional helper -->
 </head>
 
 <body>
@@ -70,6 +69,18 @@
                         <option value="30" selected>Last 30 Entries</option>
                         <option value="90">Last 90 Entries</option>
                     </select>
+                </div>
+                <div class="averages-container" id="averages-display">
+                    <div class="avg-item">
+                        <span class="avg-label">Avg Weight</span>
+                        <span class="avg-value" id="avg-weight">-</span>
+                        <span class="avg-unit">kg</span>
+                    </div>
+                    <div class="avg-item primary">
+                        <span class="avg-label">Avg BP</span>
+                        <span class="avg-value" id="avg-bp">- / -</span>
+                        <span class="avg-unit">mmHg</span>
+                    </div>
                 </div>
                 <div class="chart-container">
                     <canvas id="historyChart"></canvas>

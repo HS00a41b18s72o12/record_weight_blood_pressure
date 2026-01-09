@@ -177,6 +177,15 @@ function renderChart() {
     const sys = dataSlice.map(e => e.systolic);
     const dia = dataSlice.map(e => e.diastolic);
 
+    // Calculate Averages
+    const avgWeight = weights.length ? (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(1) : '-';
+    const avgSys = sys.length ? Math.round(sys.reduce((a, b) => a + b, 0) / sys.length) : '-';
+    const avgDia = dia.length ? Math.round(dia.reduce((a, b) => a + b, 0) / dia.length) : '-';
+
+    // Update Averages Display
+    document.getElementById('avg-weight').textContent = avgWeight;
+    document.getElementById('avg-bp').textContent = `${avgSys} / ${avgDia}`;
+
     if (chartInstance) {
         chartInstance.destroy();
     }
